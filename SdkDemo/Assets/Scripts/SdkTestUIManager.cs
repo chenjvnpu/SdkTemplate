@@ -53,7 +53,7 @@ public class SdkTestUIManager : MonoBehaviour {
 	void OnInitBtn()
 	{
 		Debug.Log ("---OnInitBtn------");
-		AndroidSdkReceiver.Instance.Init();
+		AndroidSdkManager.Instance.Initialize();
 		AndroidSdkManager.Instance.SetDebugable (true);
 		 string packageName = AndroidSdkManager.Instance.getPackageName();
 		Debug.Log ("--------> packageName is "+packageName);

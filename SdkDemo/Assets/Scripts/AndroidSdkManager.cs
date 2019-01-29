@@ -12,12 +12,18 @@ public class AndroidSdkManager {
 	AndroidJavaObject currentAndroidObj;
 	AndroidJavaObjectProxy androidJavaObjProxy;
 
+	void InitReceiver()
+	{
+		receiver = new GameObject ("AndroidSdkReceiver").AddComponent<AndroidSdkReceiver> ();
+		GameObject.DontDestroyOnLoad (receiver.gameObject);
+		receiver.Initialize ();
+
+	}
 
 	public static AndroidSdkManager Instance {
 		get {
 			if (instance == null) {
 				instance = new AndroidSdkManager ();
-				instance.Init ();
 			}
 			return instance;
 		}
@@ -25,11 +31,15 @@ public class AndroidSdkManager {
 
 	}
 
-	void Init()
+	public void Initialize()
 	{
 		currentAndroidObj = new AndroidJavaClass ("com.unity3d.player.UnityPlayer").GetStatic<AndroidJavaObject> ("currentActivity"); 
 		androidJavaObjProxy = new AndroidJavaObjectProxy (currentAndroidObj);
+		if (receiver == null) {
+			InitReceiver ();
+		}
 	}
+
 
 
 
@@ -53,7 +63,7 @@ public class AndroidSdkManager {
 	/// <summary> 登录 </summary>
 	public void Login(string account,string password,Action<string> OnLoginSuccess)
 	{
-		AndroidSdkReceiver.Instance.HandleLoginSucceeded += OnLoginSuccess;
+		receiver.HandleLoginSucceeded += OnLoginSuccess;
 		androidJavaObjProxy.Call ("Login",account,password);
 
 	}
@@ -61,7 +71,7 @@ public class AndroidSdkManager {
 	/// <summary> 登出 </summary>
 	public void Logout(Action OnLogoutSuccess)
 	{
-		AndroidSdkReceiver.Instance.HandleLogoutSucceeded += OnLogoutSuccess;
+		receiver.HandleLogoutSucceeded += OnLogoutSuccess;
 		androidJavaObjProxy.Call ("Logout");
 	}
 

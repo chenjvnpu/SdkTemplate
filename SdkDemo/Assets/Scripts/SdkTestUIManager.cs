@@ -53,27 +53,56 @@ public class SdkTestUIManager : MonoBehaviour {
 	void OnInitBtn()
 	{
 		Debug.Log ("---OnInitBtn------");
-		AndroidSdkManager.Instance.Initialize();
-		AndroidSdkManager.Instance.SetDebugable (true);
-		 string packageName = AndroidSdkManager.Instance.getPackageName();
-		Debug.Log ("--------> packageName is "+packageName);
+		#if UNITY_EDITOR
+
+		#elif UNITY_IOS
+			IOSSdkManager.Instance.Initialize();
+		#elif UNITY_ANDROID
+			AndroidSdkManager.Instance.Initialize();
+			AndroidSdkManager.Instance.SetDebugable (true);
+			string packageName = AndroidSdkManager.Instance.getPackageName();
+			Debug.Log ("--------> packageName is "+packageName);
+		#endif
+
 	}
 
 	void OnLoginBtn()
 	{
 		Debug.Log ("-----OnLoginBtn----");
-		AndroidSdkManager.Instance.Login ("zhang san","123456",(deviceId)=>{
-			Debug.Log("--------> unity receive login success message,deviceId is "+deviceId);
-		});
+
+		#if UNITY_EDITOR
+
+		#elif UNITY_IOS
+			IOSSdkManager.Instance.Login("zhang san","123456",(deviceId)=>{
+				Debug.Log("--------> unity receive login success message,deviceId is "+deviceId);
+			});
+		#elif UNITY_ANDROID
+			AndroidSdkManager.Instance.Login ("zhang san","123456",(deviceId)=>{
+				Debug.Log("--------> unity receive login success message,deviceId is "+deviceId);
+			});
+		#endif
+
+
+
 	}
 
 	void OnLogoutBtn()
 	{
 		Debug.Log ("----OnLogoutBtn-----");
-		AndroidSdkManager.Instance.Logout (()=>{
-			Debug.Log("--------> unity receive logout success message !");
-//			Check();
-		});
+
+		#if UNITY_EDITOR
+
+		#elif UNITY_IOS
+			IOSSdkManager.Instance.Logout(()=>{
+				Debug.Log("--------> unity receive logout success message !");
+			});
+		#elif UNITY_ANDROID
+			AndroidSdkManager.Instance.Logout (()=>{
+				Debug.Log("--------> unity receive logout success message !");
+			});
+		#endif
+
+
 	}
 
 
